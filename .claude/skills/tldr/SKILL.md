@@ -1,39 +1,28 @@
 ---
 name: tldr
 description: >
-  Show a concise TL;DR of all available skills — name, purpose, and usage in
-  a compact table. No verbose details. Usage: /tldr
-tools: Bash
+  Answer any question with core code + one-line summary. Clean, short, no fluff.
+  Usage: /tldr <question or topic>
+tools: Bash, Read, WebSearch
 ---
 
-# Skill TL;DR
+# TL;DR
 
-Print a compact summary table of all available skills.
+Answer with core code and a one-liner. Nothing else.
 
-## Instructions
+## Format
 
-1. Scan all skill directories:
-
-```bash
-for dir in ~/.claude/skills/*/SKILL.md .claude/skills/*/SKILL.md 2>/dev/null; do
-  name=$(basename $(dirname "$dir"))
-  desc=$(grep -m1 '^  ' "$dir" | sed 's/^ *//' | cut -c1-60)
-  usage=$(grep -oP '(?<=Usage: ).*' "$dir" | head -1)
-  [ -z "$usage" ] && usage="/$name"
-  printf "| \`%s\` | %s |\n" "$usage" "$desc"
-done
+```<lang>
+<essential code only>
 ```
 
-2. Output format — markdown table, two columns only:
+<summary: ideally one sentence, up to 3 if needed>
 
-```
-| Skill | What it does |
-|---|---|
-| `/skill-name <args>` | One-line purpose |
-```
+## Rules
 
-3. Rules:
-   - One line per skill, max 60 chars for description
-   - Show usage with args if available, otherwise just `/name`
-   - No extra explanation, no headers beyond the table
-   - Skip the template `SKILL.md` in the skills root
+- Code block: max 10 lines. Pick only the most important lines.
+- Strip imports, boilerplate, error handling — keep the core logic.
+- No comments unless behavior is truly non-obvious.
+- No preamble, no "Here's how to…", no sign-off, no headers.
+- CLI/command questions: show the command, not code.
+- Conceptual questions: one-liner only, no code block.
